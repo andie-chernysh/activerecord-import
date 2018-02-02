@@ -21,26 +21,6 @@ and then the reviews:
 That would be about 4M SQL insert statements vs 3, which results in vastly improved performance. In our case, it converted
 an 18 hour batch process to <2 hrs.
 
-### Rails 5.0
-
-Use activerecord-import 0.11.0 or higher.
-
-### Rails 4.0
-
-Use activerecord-import 0.4.0 or higher.
-
-### Rails 3.2.x up to, but not including 4.0
-
-Use activerecord-import 0.3.0 or higher.
-
-### Rails 3.1.x up to, but not including 3.2
-
-Use the latest in the activerecord-import 0.3.x series.
-
-### Rails 3.0.x up to, but not including 3.1
-
-Use activerecord-import 0.2.11. As of activerecord-import 0.3.0 we are relying on functionality that was introduced in Rails 3.1. Since Rails 3.0.x is no longer a supported version of Rails we have decided to drop support as well.
-
 ### More Information : Usage and Examples in Wiki
 
 For more information on activerecord-import please see its wiki: https://github.com/zdennis/activerecord-import/wiki
@@ -54,7 +34,7 @@ When `ActiveRecord::Import.require_adapter("fake_name")` is called the require w
   require 'activerecord-import/active_record/adapters/fake_name_adapter'
 ```
 
-This allows an external gem to dyanmically add an adapter without the need to add any file/code to the core activerecord-import gem.
+This allows an external gem to dynamically add an adapter without the need to add any file/code to the core activerecord-import gem.
 
 ### Load Path Setup
 To understand how rubygems loads code you can reference the following:

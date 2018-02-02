@@ -1,5 +1,6 @@
 ActiveRecord::Schema.define do
   execute('CREATE extension IF NOT EXISTS "hstore";')
+  execute('CREATE extension IF NOT EXISTS "pgcrypto";')
   execute('CREATE extension IF NOT EXISTS "uuid-ossp";')
 
   create_table :vendors, id: :uuid, force: :cascade do |t|
@@ -20,8 +21,10 @@ ActiveRecord::Schema.define do
 
     if t.respond_to?(:jsonb)
       t.jsonb :settings
+      t.jsonb :json_data, null: false, default: {}
     else
       t.text :settings
+      t.text :json_data
     end
 
     t.datetime :created_at
@@ -33,6 +36,7 @@ ActiveRecord::Schema.define do
     t.column :alarm_type, :integer, null: false
     t.column :status, :integer, null: false
     t.column :metadata, :text
+    t.column :secret_key, :binary
     t.datetime :created_at
     t.datetime :updated_at
   end

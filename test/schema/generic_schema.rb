@@ -165,12 +165,21 @@ ActiveRecord::Schema.define do
     t.text :settings
   end
 
-  execute %(
-  CREATE TABLE IF NOT EXISTS tags (
-        tag_id    INT NOT NULL,
-        publisher_id INT NOT NULL,
-        tag       VARCHAR(50),
-        PRIMARY KEY (tag_id, publisher_id)
-    );
-  ).split.join(' ').strip
+  create_table :cars, id: false, force: :cascade do |t|
+    t.string :Name, null: true
+    t.string :Features
+  end
+
+  add_index :cars, :Name, unique: true
+
+  unless ENV["SKIP_COMPOSITE_PK"]
+    execute %(
+    CREATE TABLE IF NOT EXISTS tags (
+          tag_id    INT NOT NULL,
+          publisher_id INT NOT NULL,
+          tag       VARCHAR(50),
+          PRIMARY KEY (tag_id, publisher_id)
+      );
+    ).split.join(' ').strip
+  end
 end

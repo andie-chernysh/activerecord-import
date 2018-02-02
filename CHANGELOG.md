@@ -1,3 +1,133 @@
+## Changes in 0.22.0
+
+### New Features
+
+* Add support for importing hashes thru a has many association. Thanks
+  to @jkowens via \#483.
+
+### Fixes
+
+* Fix validation logic for recursive import. Thanks to @eric-simonton-sama, @jkowens via
+  \#489.
+
+## Changes in 0.21.0
+
+### New Features
+
+* Allow SQL subqueries (objects that respond to .to_sql) to be passed as values. Thanks
+  to @jalada, @jkowens via \#471
+* Raise an ArgumentError when importing an array of hashes if any of the
+  hash objects have different keys. Thanks to @mbell697 via \#465.
+
+### Fixes
+
+* Fix issue loading incorrect foreign key value when syncing belongs_to
+  associations with custom foreign key columns. Thanks to @marcgreenstock, @jkowens via \#470.
+* Fix issue importing models with polymorphic belongs_to associations.
+  Thanks to @zorab47, @jkowens via \#476.
+* Fix issue importing STI models with ActiveRecord 4.0. Thanks to
+  @kazuki-st, @jkowens via \#478.
+
+## Changes in 0.20.2
+
+### Fixes
+
+* Unscope model when synchronizing with database. Thanks to @indigoviolet via \#455.
+
+## Changes in 0.20.1
+
+### Fixes
+
+* Prevent :on_duplicate_key_update args from being modified. Thanks to @joshuamcginnis, @jkowens via \#451.
+
+## Changes in 0.20.0
+
+### New Features
+
+* Allow returning columns to be specified for PostgreSQL. Thanks to
+  @tjwp via \#433.
+
+### Fixes
+
+* Fixes an issue when bypassing uniqueness validators. Thanks to @vmaxv via \#444.
+* For AR < 4.2, prevent type casting for binary columns on Postgresql. Thanks to @mwalsher via \#446.
+* Fix issue logging class name on import. Thanks to @sophylee, @jkowens via \#447.
+* Copy belongs_to association id to foreign key column before importing. Thanks to @jkowens via \#448.
+* Reset model instance on validate. Thanks to @vmaxv via \#449.
+
+## Changes in 0.19.1
+
+### Fixes
+
+* Fix a regression where models weren't properly being marked clean. Thanks to @tjwp via \#434.
+* Raise ActiveRecord::Import::ValueSetTooLargeError when a record being inserted exceeds the
+  `max_allowed_packet` for MySQL. Thanks to @saizai, @jkowens via \#437.
+* Fix issue concatenating column names array with primary key. Thanks to @keeguon via \#440.
+
+## Changes in 0.19.0
+
+### New Features
+
+* For PostgreSQL, add option to set WHERE condition in conflict_action. Thanks to
+  @Saidbek via \#423.
+
+### Fixes
+
+* Fix issue importing saved records with serialized fields. Thanks to
+  @Andreis13, @jkowens via \#425.
+* Fix issue importing records that have columns defined with default values
+  that are functions or expressions. Thanks to @Andreis13, @jkowens via \#428.
+
+## Changes in 0.18.3
+
+### Fixes
+
+* Set models new_record attribute to false when importing with
+  :on_duplicate_key_ignore. Thanks to @nijikon, @jkowens via \#416.
+
+## Changes in 0.18.2
+
+### Fixes
+
+* Enable custom validate callbacks when validating import. Thanks to @afn via \#410.
+* Prevent wrong IDs being set on models when using :on_duplicate_key_ignore.
+  Thanks to @afn, @jkowens via \#412.
+
+## Changes in 0.18.1
+
+### Fixes
+
+* Fix to enable validation callbacks (before_validation,
+  after_validation). Thanks to @sinsoku, @jkowens via \#406.
+
+## Changes in 0.18.0
+
+### New Features
+
+* Uniqueness validation is bypassed when validating models since
+  it cannot be guaranteed if there are duplicates in a batch.
+  Thanks to @jkowens via \#301.
+* Allow for custom timestamp columns. Thanks to @mojidabckuu, @jkowens
+  via \#401.
+ 
+### Fixes
+
+* Fix ActiveRecord 5 issue coercing boolean values when serializing
+  for the database. Thanks to @rjrobinson, @jkowens via \#403.
+
+## Changes in 0.17.2
+
+### Fixes
+
+* Fix issue where PostgreSQL cannot recognize columns if names
+  include mixed case characters. Thanks to @hugobgranja via \#379.
+* Fix an issue for ActiveRecord 5 where serialized fields with 
+  default values were not being typecast. Thanks to @whistlerbrk,
+  @jkowens via \#386.
+* Add option :force_single_insert for MySQL to make sure a single
+  insert is attempted instead of performing multiple inserts based
+  on max_allowed_packet. Thanks to @mtparet via \#387.
+
 ## Changes in 0.17.1
 
 ### Fixes

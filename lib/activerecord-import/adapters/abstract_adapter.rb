@@ -16,7 +16,7 @@ module ActiveRecord::Import::AbstractAdapter
       sql2insert = base_sql + values.join( ',' ) + post_sql
       insert( sql2insert, *args )
 
-      [number_of_inserts, []]
+      ActiveRecord::Import::Result.new([], number_of_inserts, [], [])
     end
 
     def pre_sql_statements(options)
@@ -57,12 +57,6 @@ module ActiveRecord::Import::AbstractAdapter
       post_sql_statements << rollup_sql if options[:rollup]
 
       post_sql_statements
-    end
-
-    # Returns the maximum number of bytes that the server will allow
-    # in a single packet
-    def max_allowed_packet
-      NO_MAX_PACKET
     end
 
     def supports_on_duplicate_key_update?

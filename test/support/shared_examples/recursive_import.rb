@@ -90,6 +90,19 @@ def should_support_recursive_import
       end
     end
 
+    # Models are only valid if all associations are valid
+    it "only imports models with valid associations" do
+      assert_difference "Topic.count", 2 do
+        assert_difference "Book.count", 4 do
+          assert_difference "Chapter.count", 12 do
+            assert_difference "EndNote.count", 16 do
+              Topic.import new_topics_with_invalid_chapter, recursive: true
+            end
+          end
+        end
+      end
+    end
+
     it "skips validation of the associations if requested" do
       assert_difference "Chapter.count", +num_chapters do
         Topic.import new_topics_with_invalid_chapter, validate: false, recursive: true
@@ -102,35 +115,42 @@ def should_support_recursive_import
       end
     end
 
-    describe "with composite primary keys" do
-      it "should import models and set id" do
-        tags = []
-        tags << Tag.new(tag_id: 1, publisher_id: 1, tag: 'Mystery')
-        tags << Tag.new(tag_id: 2, publisher_id: 1, tag: 'Science')
+    it "imports an imported belongs_to association id" do
+      books = new_topics[0].books.to_a
+      Topic.import new_topics, validate: false
 
-        assert_difference "Tag.count", +2 do
-          Tag.import tags
-        end
+      assert_difference "Book.count", books.size do
+        Book.import books, validate: false
+      end
 
-        assert_equal 1, tags[0].tag_id
-        assert_equal 2, tags[1].tag_id
+      books.each do |book|
+        assert_not_nil book.topic_id
       end
     end
 
-    # These models dont validate associated.  So we expect that books and topics get inserted, but not chapters
-    # Putting a transaction around everything wouldn't work, so if you want your chapters to prevent topics from
-    # being created, you would need to have validates_associated in your models and insert with validation
-    describe "all_or_none" do
-      [Book, Topic, EndNote].each do |type|
-        it "creates #{type}" do
-          assert_difference "#{type}.count", send("num_#{type.to_s.downcase}s") do
-            Topic.import new_topics_with_invalid_chapter, all_or_none: true, recursive: true
+    unless ENV["SKIP_COMPOSITE_PK"]
+      describe "with composite primary keys" do
+        it "should import models and set id" do
+          tags = []
+          tags << Tag.new(tag_id: 1, publisher_id: 1, tag: 'Mystery')
+          tags << Tag.new(tag_id: 2, publisher_id: 1, tag: 'Science')
+
+          assert_difference "Tag.count", +2 do
+            Tag.import tags
           end
+
+          assert_equal 1, tags[0].tag_id
+          assert_equal 2, tags[1].tag_id
         end
       end
-      it "doesn't create chapters" do
-        assert_difference "Chapter.count", 0 do
-          Topic.import new_topics_with_invalid_chapter, all_or_none: true, recursive: true
+    end
+
+    describe "all_or_none" do
+      [Book, Chapter, Topic, EndNote].each do |type|
+        it "creates #{type}" do
+          assert_difference "#{type}.count", 0 do
+            Topic.import new_topics_with_invalid_chapter, all_or_none: true, recursive: true
+          end
         end
       end
     end
